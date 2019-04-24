@@ -4,10 +4,13 @@ import (
 	"github.com/labstack/echo"
 )
 
-type JwtConfig struct {
-	Secret  string
-	Session string
-}
+type (
+	//jwt 配置文件
+	JwtConfig struct {
+		Secret  string
+		Session string
+	}
+)
 
 func JwtMiddlewareWithConfig(conf JwtConfig) echo.MiddlewareFunc {
 
