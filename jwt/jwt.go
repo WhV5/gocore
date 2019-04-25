@@ -56,7 +56,7 @@ func (t *Token) signToken(secret string) error {
 
 	if err != nil {
 
-		return errors.New("json marshal header error")
+		return errors.New("json marshal header errs")
 	}
 
 	pb, err := json.Marshal(t.Payload)
@@ -109,7 +109,7 @@ func verify(token, secret string) (interface{}, error) {
 
 	if len(t) != 3 {
 
-		return nil, fmt.Errorf("token split error, required 3 parts,but find %d parts", len(t))
+		return nil, fmt.Errorf("token split errs, required 3 parts,but find %d parts", len(t))
 	}
 
 	pstr := t[0] + "." + t[1]
@@ -117,7 +117,7 @@ func verify(token, secret string) (interface{}, error) {
 	sign := encrypt(secret, pstr)
 
 	if sign != t[2] {
-		return nil, fmt.Errorf("signature error;token has been tampered")
+		return nil, fmt.Errorf("signature errs;token has been tampered")
 	}
 
 	pb, err := decode(t[1])

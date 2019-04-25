@@ -1,4 +1,4 @@
-package error
+package errs
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ type ServiceError struct {
 	ErrMessage string `json:"err_message"`
 }
 
-func (se *ServiceError) Error() string {
+func (se ServiceError) Error() string {
 	return fmt.Sprintf("[%s]%s", se.ErrCode, se.ErrMessage)
 }
 
