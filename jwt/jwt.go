@@ -42,7 +42,7 @@ func newToken(secret string, expire int64, data interface{}) (*token, error) {
 		data: data,
 	}
 
-	signature, err := sign(h, p)
+	signature, err := sign(h, p, secret)
 
 	if err != nil {
 		return nil, err
