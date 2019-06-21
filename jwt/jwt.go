@@ -17,30 +17,30 @@ type token struct {
 }
 
 type header struct {
-	alg string //签名算法  hmac sha256
-	typ string //令牌类型  jwt
+	Alg string //签名算法  hmac sha256
+	Typ string //令牌类型  jwt
 }
 
 type payload struct {
-	iss  string      //签发人
-	exp  int64       //过期时间
-	sub  string      //主题
-	iat  time.Time   //签发时间
-	data interface{} //内容
+	Iss  string      //签发人
+	Exp  int64       //过期时间
+	Sub  string      //主题
+	Iat  time.Time   //签发时间
+	Data interface{} //内容
 }
 
 func newToken(secret string, expire int64, data interface{}) (*token, error) {
 	h := header{
-		alg: "hs256",
-		typ: "jwt",
+		Alg: "hs256",
+		Typ: "jwt",
 	}
 
 	p := payload{
-		iss:  "",
-		exp:  expire,
-		sub:  "",
-		iat:  time.Now(),
-		data: data,
+		Iss:  "",
+		Exp:  expire,
+		Sub:  "",
+		Iat:  time.Now(),
+		Data: data,
 	}
 
 	signature, err := sign(h, p, secret)
