@@ -11,17 +11,17 @@ import (
 
 //Token jwtToken 结构体
 type token struct {
-	header    header
-	payload   payload
-	signature string
+	Header    Header
+	Payload   Payload
+	Signature string
 }
 
-type header struct {
+type Header struct {
 	Alg string //签名算法  hmac sha256
 	Typ string //令牌类型  jwt
 }
 
-type payload struct {
+type Payload struct {
 	Iss  string      //签发人
 	Exp  int64       //过期时间
 	Sub  string      //主题
@@ -30,12 +30,12 @@ type payload struct {
 }
 
 func newToken(secret string, expire int64, data interface{}) (*token, error) {
-	h := header{
+	h := Header{
 		Alg: "hs256",
 		Typ: "jwt",
 	}
 
-	p := payload{
+	p := Payload{
 		Iss:  "",
 		Exp:  expire,
 		Sub:  "",
@@ -49,7 +49,7 @@ func newToken(secret string, expire int64, data interface{}) (*token, error) {
 		return nil, err
 	}
 
-	return &token{header: h, payload: p, signature: signature}, nil
+	return &token{Header: h, Payload: p, Signature: signature}, nil
 }
 
 //NewTokenStr
@@ -61,15 +61,15 @@ func NewTokenStr(secret string, expire int64, data interface{}) (string, error) 
 		return "", errors.New("generator token has error occurred")
 	}
 
-	sh, err := encode(t.header)
+	sh, err := encode(t.Header)
 
 	if err != nil {
 		return "", err
 	}
 
-	sp, err := encode(t.payload)
+	sp, err := encode(t.Payload)
 
-	jwtToken := sh + "." + sp + "." + t.signature
+	jwtToken := sh + "." + sp + "." + t.Signature
 
 	return jwtToken, nil
 }
@@ -80,7 +80,7 @@ func VerifyToken(ts string) bool {
 	return false
 }
 
-func sign(h header, p payload, secret string) (string, error) {
+func sign(h Header, p Payload, secret string) (string, error) {
 	he, err := encode(h)
 
 	if err != nil {
