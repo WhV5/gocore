@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"time"
 )
 
@@ -113,8 +114,10 @@ func encode(value interface{}) (string, error) {
 	if err != nil {
 		return "", errors.New("marshal json has error occurred")
 	}
+	s := base64.StdEncoding.EncodeToString(b)
 
-	return base64.StdEncoding.EncodeToString(b), nil
+	fmt.Println(s)
+	return s, nil
 }
 
 func decode(s string, v interface{}) error {
