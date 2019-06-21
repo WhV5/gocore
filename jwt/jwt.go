@@ -66,7 +66,7 @@ func NewTokenStr(secret string, expire int64, data interface{}) (string, error) 
 		return "", err
 	}
 
-	sp, err := encode(t.header)
+	sp, err := encode(t.payload)
 
 	jwtToken := sh + "." + sp + "." + t.signature
 
