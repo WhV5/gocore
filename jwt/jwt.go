@@ -102,7 +102,7 @@ func sign(h header, p payload, secret string) (string, error) {
 		return "", errors.New("sign error has occurred")
 	}
 
-	return base64.StdEncoding.EncodeToString(hmac.Sum(nil)), nil
+	return base64.StdEncoding.EncodeToString(hmac.Sum([]byte{})), nil
 
 }
 
