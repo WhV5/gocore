@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -75,9 +76,66 @@ func NewTokenStr(secret string, expire int64, data interface{}) (string, error) 
 }
 
 //VerifyToken 严重token
-func VerifyToken(ts string) bool {
+func VerifyToken(ts, secret string) (interface{}, error) {
 
-	return false
+	//验证 token 是否被篡改
+
+	sp := strings.Split(ts, ".")
+
+	if ok := len(sp) != 3; ok {
+		return nil, errors.New("token has been tampered")
+	}
+
+	hs := sp[0]
+	ps := sp[1]
+	ss := sp[3]
+
+	psign := hs + "." + ps
+
+	rs, err := sha245(psign, secret)
+
+	if err != nil {
+		return nil, errors.New("token verify has error been occurred")
+	}
+
+	if rs != ss {
+		return nil, errors.New("signature has been tampered")
+	}
+
+	//校验 payload 是否过期
+
+	p, err := getPayload(ps)
+
+	if err != nil {
+		return nil, errors.New("token payload decode error has been occurred")
+	}
+
+	return p, nil
+
+}
+
+func getPayload(ps string) (*Payload, error) {
+	var payload Payload
+
+	err := decode(ps, &payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &payload, nil
+}
+
+func sha245(ps string, secret string) (string, error) {
+	hmac := sha256.New()
+
+	_, err := hmac.Write([]byte(ps))
+
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(hmac.Sum([]byte{})), nil
 }
 
 func sign(h Header, p Payload, secret string) (string, error) {
