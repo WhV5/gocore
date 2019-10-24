@@ -1,3 +1,3 @@
-module github.com/sauron/gocore
+module github.com/pssauron/gocore
 
 go 1.13
